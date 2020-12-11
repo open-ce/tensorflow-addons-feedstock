@@ -1,0 +1,39 @@
+{% set version = "0.11.2" %}
+
+package:
+  name: tensorflow-addons
+  version: {{ version }}
+
+source:
+  git_url: https://github.com/tensorflow/addons.git
+  git_rev: v{{ version }}
+
+build:
+  number: 1
+  
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - bazel {{ bazel }}
+  host:
+    - git >=2.2
+    - python  # noarch package; don't tie to specific python version
+    - tensorflow-base {{ tensorflow }}
+  run:
+    - python  # noarch package; don't tie to specific python version
+    - tensorflow-base {{ tensorflow }}
+
+about:
+  home: https://www.tensorflow.org/addons/
+  license: Apache-2.0
+  license_family: Apache
+  license_file: {{ SRC_DIR }}/LICENSE
+  summary: "A library that implements new functionality not available in core TensorFlow."
+  description: |
+     TensorFlow Addons is a repository of contributions that conform to well-established API patterns,
+     but implements new functionality not available in core.
+
+extra:
+  recipe-maintainers:
+    - open-ce/open-ce-dev-team
