@@ -10,6 +10,7 @@ source:
 
 build:
   number: 1
+  string: _py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
   
 requirements:
   build:
@@ -18,10 +19,10 @@ requirements:
     - bazel {{ bazel }}
   host:
     - git >=2.2
-    - python  # noarch package; don't tie to specific python version
+    - python  {{ python }}
     - tensorflow-base {{ tensorflow }}
   run:
-    - python  # noarch package; don't tie to specific python version
+    - python  {{ python }}
     - tensorflow-base {{ tensorflow }}
 
 about:
