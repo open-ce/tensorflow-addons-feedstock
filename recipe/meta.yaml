@@ -1,4 +1,4 @@
-{% set version = "0.11.2" %}
+{% set version = "0.12.1" %}
 
 package:
   name: tensorflow-addons
@@ -9,9 +9,13 @@ source:
   git_rev: v{{ version }}
 
 build:
-  number: 3
+  number: 1
   string: py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
-  
+{% if build_type == 'cuda' %}
+      script_env:
+        - CUDA_HOME
+{% endif %}
+
 requirements:
   build:
     - {{ compiler('c') }}
@@ -20,9 +24,19 @@ requirements:
     - git >={{ git }}
   host:
     - python  {{ python }}
+    {% if build_type == 'cuda' %}
+    - cudatoolkit {{ cudatoolkit }}
+    - cudnn {{ cudnn }}
+    - nccl {{ nccl }}
+    {% endif %}
     - tensorflow-base {{ tensorflow }}
   run:
     - python  {{ python }}
+    {% if build_type == 'cuda' %}
+    - cudatoolkit {{ cudatoolkit }}
+    - cudnn {{ cudnn }}
+    - nccl {{ nccl }}
+    {% endif %}
     - tensorflow-base {{ tensorflow }}
 
 about:
