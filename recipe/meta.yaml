@@ -12,8 +12,8 @@ build:
   number: 1
   string: py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
 {% if build_type == 'cuda' %}
-      script_env:
-        - CUDA_HOME
+  script_env:
+    - CUDA_HOME
 {% endif %}
 
 requirements:
