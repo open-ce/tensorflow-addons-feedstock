@@ -1,0 +1,32 @@
+# Recipe to build Tensorflow-addons meta package
+{% set build_version = "0.12" %}
+
+package:
+  name: tensorflow-addons{{ '' if build_type == 'cuda' else '-cpu' }}
+  version: {{ build_version }}
+
+build:
+  number: 1
+  string: py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}   #[build_type == 'cpu']
+  string: {{ build_type }}{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }} #[build_type == 'cuda']
+
+requirements:
+  run:
+    - tensorflow-addons-base              {{ build_version }}
+    - tensorflow-addons-select     {{ tf_addons_select_version }}
+    - python                       {{ python }}
+    - cudatoolkit                  {{ cudatoolkit }} #[build_type == 'cuda']
+
+about:
+  home: https://www.tensorflow.org/addons/
+  license: Apache-2.0
+  license_family: Apache
+  summary: "A library that implements new functionality not available in core TensorFlow."
+  description: |
+     TensorFlow Addons is a repository of contributions that conform to well-established API patterns,
+     but implements new functionality not available in core.
+
+extra:
+  recipe-maintainers:
+    - open-ce/open-ce-dev-team
+
