@@ -34,6 +34,7 @@ python ./configure.py
 
 SCRIPT_DIR=$RECIPE_DIR/../buildscripts
 $SCRIPT_DIR/set_python_path_for_bazelrc.sh $SRC_DIR
+$SCRIPT_DIR/set_tf_addons_for_bazelrc.sh $SRC_DIR
 
 bazel build --enable_runfiles build_pip_pkg
 
