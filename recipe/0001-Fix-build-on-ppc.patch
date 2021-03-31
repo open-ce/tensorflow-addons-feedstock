@@ -1,0 +1,36 @@
+From c92c7f04f6e7cc2f7adc4ec4557c255a8e26ade3 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 31 Mar 2021 08:58:25 +0000
+Subject: [PATCH] Fix build on ppc
+
+---
+ configure.py | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/configure.py b/configure.py
+index 4772a55..826a78d 100644
+--- a/configure.py
++++ b/configure.py
+@@ -48,6 +48,10 @@ def is_linux():
+     return platform.system() == "Linux"
+ 
+ 
++def is_ppc64le():
++    return os.uname()[4] == "ppc64le"
++
++
+ def is_raspi_arm():
+     return os.uname()[4] == "armv7l"
+ 
+@@ -118,7 +122,7 @@ def create_build_configuration():
+         write("build:windows --host_copt=/experimental:preprocessor")
+         write("build:windows --copt=/arch=AVX")
+ 
+-    if is_macos() or is_linux():
++    if is_macos() or (is_linux() and not is_ppc64le()):
+         write("build --copt=-mavx")
+ 
+     if os.getenv("TF_NEED_CUDA", "0") == "1":
+-- 
+1.8.3.1
+
