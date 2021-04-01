@@ -23,7 +23,6 @@ bazel shutdown
 if [[ $build_type == "cuda" ]];
 then 
   export TF_NEED_CUDA=1
-  # Set these if the below defaults are different on your system
   export TF_CUDA_VERSION="${cudatoolkit%.*}"
   export TF_CUDNN_VERSION="${cudnn%.*}"
   export CUDA_TOOLKIT_PATH=$CUDA_HOME,$PREFIX,"/usr/include"
