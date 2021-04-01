@@ -1,33 +1,49 @@
-From c92c7f04f6e7cc2f7adc4ec4557c255a8e26ade3 Mon Sep 17 00:00:00 2001
+From ffc2286cc96a5d0bb5e914cd815a5f1d5d97a651 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 31 Mar 2021 08:58:25 +0000
-Subject: [PATCH] Fix build on ppc
+Date: Thu, 1 Apr 2021 13:25:39 +0000
+Subject: [PATCH] Fixed build on ppc
 
 ---
- configure.py | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ configure.py | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
 diff --git a/configure.py b/configure.py
-index 4772a55..826a78d 100644
+index 4772a55..88d21a7 100644
 --- a/configure.py
 +++ b/configure.py
-@@ -48,6 +48,10 @@ def is_linux():
-     return platform.system() == "Linux"
- 
- 
-+def is_ppc64le():
-+    return os.uname()[4] == "ppc64le"
-+
-+
- def is_raspi_arm():
+@@ -52,6 +52,26 @@ def is_raspi_arm():
      return os.uname()[4] == "armv7l"
  
-@@ -118,7 +122,7 @@ def create_build_configuration():
+ 
++def is_linux_ppc64le():
++    return is_linux() and platform.machine() == "ppc64le"
++
++
++def is_linux_x86_64():
++    return is_linux() and platform.machine() == "x86_64"
++
++
++def is_linux_arm():
++    return is_linux() and platform.machine() == "arm"
++
++
++def is_linux_aarch64():
++    return is_linux() and platform.machine() == "aarch64"
++
++
++def is_linux_s390x():
++    return is_linux() and platform.machine() == "s390x"
++
++
+ def get_tf_header_dir():
+     import tensorflow as tf
+ 
+@@ -118,7 +138,7 @@ def create_build_configuration():
          write("build:windows --host_copt=/experimental:preprocessor")
          write("build:windows --copt=/arch=AVX")
  
 -    if is_macos() or is_linux():
-+    if is_macos() or (is_linux() and not is_ppc64le()):
++    if is_macos() or (is_linux() and not is_linux_ppc64le()):
          write("build --copt=-mavx")
  
      if os.getenv("TF_NEED_CUDA", "0") == "1":
