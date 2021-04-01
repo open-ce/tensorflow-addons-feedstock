@@ -20,7 +20,21 @@ set -vex
 bazel clean --expunge
 bazel shutdown
 
+if [[ $build_type == "cuda" ]];
+then 
+  export TF_NEED_CUDA=1
+  # Set these if the below defaults are different on your system
+  export TF_CUDA_VERSION="${cudatoolkit%.*}"
+  export TF_CUDNN_VERSION="${cudnn%.*}"
+  export CUDA_TOOLKIT_PATH=$CUDA_HOME,$PREFIX,"/usr/include"
+  export CUDNN_INSTALL_PATH=$PREFIX
+fi
+
 python ./configure.py
+
+SCRIPT_DIR=$RECIPE_DIR/../buildscripts
+$SCRIPT_DIR/set_python_path_for_bazelrc.sh $SRC_DIR
+$SCRIPT_DIR/set_tf_addons_for_bazelrc.sh $SRC_DIR
 
 bazel build --enable_runfiles build_pip_pkg
 
