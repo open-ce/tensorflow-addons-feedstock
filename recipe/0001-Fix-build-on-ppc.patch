@@ -43,7 +43,7 @@ index 4772a55..88d21a7 100644
          write("build:windows --copt=/arch=AVX")
  
 -    if is_macos() or is_linux():
-+    if is_macos() or (is_linux() and not is_linux_ppc64le()):
++    if is_macos() or is_linux_x86_64():
          write("build --copt=-mavx")
  
      if os.getenv("TF_NEED_CUDA", "0") == "1":
