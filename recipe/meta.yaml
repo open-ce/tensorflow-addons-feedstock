@@ -1,7 +1,9 @@
 {% set version = "0.12.1" %}
+{% set build_ext_version = version %}
+{% set proc_build_number = "1" %}
 
 package:
-  name: tensorflow-addons
+  name: tensorflow-addons-ext
   version: {{ version }}
 
 source:
@@ -11,21 +13,82 @@ source:
     - 0001-Fix-build-on-ppc.patch  #[ppc64le] 
 
 build:
-  number: 1
-  string: py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
-  
-requirements:
-  build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - bazel {{ bazel }}
-    - git >={{ git }}
-  host:
-    - python  {{ python }}
-    - tensorflow-base {{ tensorflow }}
-  run:
-    - python  {{ python }}
-    - tensorflow-base {{ tensorflow }}
+  number: 2
+  run_exports:
+    - {{ pin_subpackage("tensorflow-addons", max_pin="x.x.x") }}
+
+outputs:
+  - name: tensorflow-addons-proc
+    version: {{ build_ext_version }}
+    build:
+      number: {{ proc_build_number }}
+      string: {{ build_type }}
+    test:
+      commands:
+        - exit 0
+    about:
+      home: https://www.tensorflow.org/addons/
+      license: Apache-2.0
+      license_family: Apache
+      license_file: {{ SRC_DIR }}/LICENSE
+      summary: "A meta-package to select TensorFlow addons build variant"
+
+  - name: tensorflow-addons
+    script: build-addons.sh
+    version: {{ version }}
+    build:
+      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ build_type }}{{ cudatoolkit | replace(".*", "") }} #[build_type == 'cuda']
+      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ build_type }}  #[build_type == 'cpu']
+{% if build_type == 'cuda' %}
+      script_env:
+        - CUDA_HOME
+{% endif %}
+      run_exports:
+        - {{ pin_subpackage("tensorflow-addons", max_pin="x.x.x") }}
+      track_features:
+        {{ "- tensorflow-addons-cuda" if build_type == 'cuda' else "" }} 
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - bazel {{ bazel }}
+        - git >={{ git }}
+      host:
+        - python  {{ python }}
+{% if build_type == 'cuda' %}
+        - cudatoolkit {{ cudatoolkit }}
+        - cudnn {{ cudnn }}
+        - nccl {{ nccl }}
+        - tensorflow {{ tensorflow }}
+{% endif %}
+        - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
+      run:
+        - python  {{ python }}
+{% if build_type == 'cuda' %}
+        - cudatoolkit {{ cudatoolkit }}
+        - cudnn {{ cudnn }}
+        - nccl {{ nccl }}
+        - tensorflow {{ tensorflow }}
+{% endif %}
+        - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
+        - typeguard
+      run_constrained:
+        - tensorflow-addons-proc * {{ build_type }}
+
+
+    about:
+      home: https://www.tensorflow.org/addons/
+      license: Apache-2.0
+      license_family: Apache
+      license_file: {{ SRC_DIR }}/LICENSE
+      summary: "A library that implements new functionality not available in core TensorFlow."
+      description: |
+         TensorFlow Addons is a repository of contributions that conform to well-established API patterns,
+         but implements new functionality not available in core.
+
+    test:
+      imports:
+        - tensorflow_addons
 
 about:
   home: https://www.tensorflow.org/addons/
