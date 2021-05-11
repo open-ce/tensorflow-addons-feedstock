@@ -40,7 +40,7 @@ outputs:
     build:
       string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ build_ext }}{{ cudatoolkit | replace(".*", "") }} #[build_type == 'cuda']
       string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ build_ext }}  #[build_type == 'cpu']
- {% if build_type == 'cuda' %}
+{% if build_type == 'cuda' %}
       script_env:
         - CUDA_HOME
 {% endif %}
@@ -56,19 +56,19 @@ outputs:
         - git >={{ git }}
       host:
         - python  {{ python }}
-      {% if build_type == 'cuda' %}
-￼       - cudatoolkit {{ cudatoolkit }}
-￼       - cudnn {{ cudnn }}
-￼       - nccl {{ nccl }}
- ￼    {% endif %}
+{% if build_type == 'cuda' %}
+        - cudatoolkit {{ cudatoolkit }}
+        - cudnn {{ cudnn }}
+        - nccl {{ nccl }}
+{% endif %}
         - tensorflow-base {{ tensorflow }}
       run:
         - python  {{ python }}
-      {% if build_type == 'cuda' %}
-￼       - cudatoolkit {{ cudatoolkit }}
-￼       - cudnn {{ cudnn }}
-￼       - nccl {{ nccl }}
- ￼    {% endif %}
+{% if build_type == 'cuda' %}
+        - cudatoolkit {{ cudatoolkit }}
+        - cudnn {{ cudnn }}
+        - nccl {{ nccl }}
+{% endif %}
         - tensorflow-base {{ tensorflow }}
       run_constrained:
         - tensorflow-addons-proc * {{ build_ext }}
@@ -84,8 +84,8 @@ outputs:
          TensorFlow Addons is a repository of contributions that conform to well-established API patterns,
          but implements new functionality not available in core.
 
-    test:
-      imports:
+#    test:
+#      imports:
         #- tensorflow-addons
 
 about:
