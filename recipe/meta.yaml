@@ -70,6 +70,7 @@ outputs:
         - nccl {{ nccl }}
 {% endif %}
         - tensorflow-base {{ tensorflow }}
+        - typeguard
       run_constrained:
         - tensorflow-addons-proc * {{ build_ext }}
 
@@ -84,9 +85,9 @@ outputs:
          TensorFlow Addons is a repository of contributions that conform to well-established API patterns,
          but implements new functionality not available in core.
 
-#    test:
-#      imports:
-        #- tensorflow-addons
+    test:
+      imports:
+        - tensorflow_addons
 
 about:
   home: https://www.tensorflow.org/addons/
