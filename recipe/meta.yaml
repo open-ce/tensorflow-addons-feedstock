@@ -13,7 +13,7 @@ source:
     - 0001-Fix-build-on-ppc.patch  #[ppc64le] 
 
 build:
-  number: 2
+  number: 3
   run_exports:
     - {{ pin_subpackage("tensorflow-addons", max_pin="x.x.x") }}
 
@@ -51,6 +51,9 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
+        # Use pins to control cos6/cos7 match
+        - libgcc-ng  {{ libgcc }}
+        - libstdcxx-ng  {{ libstdcxx }}
         - bazel {{ bazel }}
         - git >={{ git }}
       host:
@@ -62,6 +65,9 @@ outputs:
         - tensorflow {{ tensorflow }}
 {% endif %}
         - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
+        # Use pins to control cos6/cos7 match
+        - libgcc-ng  {{ libgcc }}
+        - libstdcxx-ng  {{ libstdcxx }}
       run:
         - python  {{ python }}
 {% if build_type == 'cuda' %}
