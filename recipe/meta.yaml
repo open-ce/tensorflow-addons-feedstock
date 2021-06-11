@@ -93,6 +93,10 @@ outputs:
          but implements new functionality not available in core.
 
     test:
+      requires:
+        # Use pins to control cos6/cos7 match
+        - libgcc-ng  {{ libgcc }}
+        - libstdcxx-ng  {{ libstdcxx }}
       imports:
         - tensorflow_addons
 
