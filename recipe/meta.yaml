@@ -13,9 +13,12 @@ source:
     - 0001-Fix-build-on-ppc.patch  #[ppc64le] 
 
 build:
-  number: 2
+  number: 3
   run_exports:
     - {{ pin_subpackage("tensorflow-addons", max_pin="x.x.x") }}
+  ignore_run_exports:
+    - libgcc-ng
+    - libstdcxx-ng
 
 outputs:
   - name: tensorflow-addons-proc
@@ -45,12 +48,18 @@ outputs:
 {% endif %}
       run_exports:
         - {{ pin_subpackage("tensorflow-addons", max_pin="x.x.x") }}
+      ignore_run_exports:
+        - libgcc-ng
+        - libstdcxx-ng
       track_features:
         {{ "- tensorflow-addons-cuda" if build_type == 'cuda' else "" }} 
     requirements:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
+        # Use pins to control cos6/cos7 match
+        - libgcc-ng  {{ libgcc }}
+        - libstdcxx-ng  {{ libstdcxx }}
         - bazel {{ bazel }}
         - git >={{ git }}
       host:
@@ -62,6 +71,9 @@ outputs:
         - tensorflow {{ tensorflow }}
 {% endif %}
         - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
+        # Use pins to control cos6/cos7 match
+        - libgcc-ng  {{ libgcc }}
+        - libstdcxx-ng  {{ libstdcxx }}
       run:
         - python  {{ python }}
 {% if build_type == 'cuda' %}
@@ -72,6 +84,9 @@ outputs:
 {% endif %}
         - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
         - typeguard
+        # Use pins to control cos6/cos7 match
+        - libgcc-ng  {{ libgcc }}
+        - libstdcxx-ng  {{ libstdcxx }}
       run_constrained:
         - tensorflow-addons-proc * {{ build_type }}
 
