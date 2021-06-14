@@ -16,6 +16,9 @@ build:
   number: 3
   run_exports:
     - {{ pin_subpackage("tensorflow-addons", max_pin="x.x.x") }}
+  ignore_run_exports:
+    - libgcc-ng
+    - libstdcxx-ng
 
 outputs:
   - name: tensorflow-addons-proc
@@ -45,6 +48,9 @@ outputs:
 {% endif %}
       run_exports:
         - {{ pin_subpackage("tensorflow-addons", max_pin="x.x.x") }}
+      ignore_run_exports:
+        - libgcc-ng
+        - libstdcxx-ng
       track_features:
         {{ "- tensorflow-addons-cuda" if build_type == 'cuda' else "" }} 
     requirements:
@@ -78,6 +84,9 @@ outputs:
 {% endif %}
         - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
         - typeguard
+        # Use pins to control cos6/cos7 match
+        - libgcc-ng  {{ libgcc }}
+        - libstdcxx-ng  {{ libstdcxx }}
       run_constrained:
         - tensorflow-addons-proc * {{ build_type }}
 
@@ -93,10 +102,6 @@ outputs:
          but implements new functionality not available in core.
 
     test:
-      requires:
-        # Use pins to control cos6/cos7 match
-        - libgcc-ng  {{ libgcc }}
-        - libstdcxx-ng  {{ libstdcxx }}
       imports:
         - tensorflow_addons
 
