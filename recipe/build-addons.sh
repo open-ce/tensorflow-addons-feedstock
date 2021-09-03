@@ -27,6 +27,7 @@ then
   export TF_CUDNN_VERSION="${cudnn%.*}"
   export CUDA_TOOLKIT_PATH=$CUDA_HOME,$PREFIX,"/usr/include"
   export CUDNN_INSTALL_PATH=$PREFIX
+  export TF_CUDA_COMPUTE_CAPABILITIES=${cuda_levels}
 fi
 python ./configure.py
 
