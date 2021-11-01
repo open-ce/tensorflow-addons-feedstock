@@ -11,7 +11,7 @@ source:
   git_rev: v{{ version }}
 
 build:
-  number: 2
+  number: 3
   run_exports:
     - {{ pin_subpackage("tensorflow-addons", max_pin="x.x.x") }}
 
@@ -69,6 +69,7 @@ outputs:
         - tensorflow {{ tensorflow }}
 {% endif %}
         - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
+        - keras {{ keras }}
         - typeguard
       run_constrained:
         - tensorflow-addons-proc * {{ build_type }}
