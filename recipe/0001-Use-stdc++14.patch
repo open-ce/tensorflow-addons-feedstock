@@ -1,0 +1,25 @@
+From 0980ce0c92b8e35e38a2b9cbbdb628755b77a99d Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Thu, 11 Nov 2021 05:15:49 -0500
+Subject: [PATCH] Changed to std=c++14
+
+---
+ build_deps/toolchains/gpu/crosstool/cc_toolchain_config.bzl.tpl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build_deps/toolchains/gpu/crosstool/cc_toolchain_config.bzl.tpl b/build_deps/toolchains/gpu/crosstool/cc_toolchain_config.bzl.tpl
+index ba002b4..3d4d44f 100755
+--- a/build_deps/toolchains/gpu/crosstool/cc_toolchain_config.bzl.tpl
++++ b/build_deps/toolchains/gpu/crosstool/cc_toolchain_config.bzl.tpl
+@@ -1253,7 +1253,7 @@ def _impl(ctx):
+         flag_sets = [
+             flag_set(
+                 actions = [ACTION_NAMES.cpp_compile],
+-                flag_groups = [flag_group(flags = ["-std=c++11"])],
++                flag_groups = [flag_group(flags = ["-std=c++14"])],
+             ),
+         ],
+     )
+-- 
+2.23.0
+
