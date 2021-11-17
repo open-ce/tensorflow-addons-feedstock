@@ -10,7 +10,7 @@ source:
   git_url: https://github.com/tensorflow/addons.git
   git_rev: v{{ version }}
   patches:
-    - 0001-Use-stdc++14.patch
+    - 0001-Allow-c-14-for-nvcc-2605.patch
 
 build:
   number: 1

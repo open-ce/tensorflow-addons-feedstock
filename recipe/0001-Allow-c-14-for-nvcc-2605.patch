@@ -1,0 +1,27 @@
+From d49000afbd60cdb32f8bfc455e25ae83dea4d981 Mon Sep 17 00:00:00 2001
+From: Shkarupa Alex <shkarupa.alex@gmail.com>
+Date: Tue, 16 Nov 2021 05:26:47 +0300
+Subject: [PATCH] Allow c++14 for nvcc (#2605)
+
+---
+ .../clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl         | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/build_deps/toolchains/gpu/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl b/build_deps/toolchains/gpu/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+index f4f4d0e..224d47a 100644
+--- a/build_deps/toolchains/gpu/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
++++ b/build_deps/toolchains/gpu/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+@@ -166,8 +166,8 @@ def InvokeNvcc(argv, log=False):
+   undefines = GetOptionValue(argv, 'U')
+   undefines = ''.join([' -U' + define for define in undefines])
+   std_options = GetOptionValue(argv, 'std')
+-  # currently only c++11 is supported by Cuda 7.0 std argument
+-  nvcc_allowed_std_options = ["c++11"]
++  # Supported -std flags as of CUDA 9.0. Only keep last to mimic gcc/clang.
++  nvcc_allowed_std_options = ["c++03", "c++11", "c++14"]
+   std_options = ''.join([' -std=' + define
+       for define in std_options if define in nvcc_allowed_std_options])
+ 
+-- 
+2.23.0
+
