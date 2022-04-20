@@ -11,6 +11,7 @@ source:
   git_rev: v{{ version }}
   patches:
     - 0001-Allow-c-14-for-nvcc-2605.patch
+    - 0002-s390x-remove-avx.patch
 
 build:
   number: 2
