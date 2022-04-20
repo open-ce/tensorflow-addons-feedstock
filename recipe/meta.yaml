@@ -11,10 +11,10 @@ source:
   git_rev: v{{ version }}
   patches:
     - 0001-Allow-c-14-for-nvcc-2605.patch
-    - 0002-s390x-remove-avx.patch
+    - 0002-s390x-remove-avx.patch # [s390x]
 
 build:
-  number: 2
+  number: 3
   run_exports:
     - {{ pin_subpackage("tensorflow-addons", max_pin="x.x.x") }}
 
