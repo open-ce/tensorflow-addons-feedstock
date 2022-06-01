@@ -47,8 +47,8 @@ outputs:
         {{ "- tensorflow-addons-cuda" if build_type == 'cuda' else "" }} 
     requirements:
       build:
-        - {{ compiler('c') }}      # [ ppc_arch != "p10"]
-        - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
         - bazel {{ bazel }}
         - git >={{ git }}
       host:
