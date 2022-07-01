@@ -1,4 +1,4 @@
-{% set version = "0.16.1" %}
+{% set version = "0.17.0" %}
 {% set build_ext_version = version %}
 {% set proc_build_number = "1" %}
 
@@ -9,6 +9,8 @@ package:
 source:
   git_url: https://github.com/tensorflow/addons.git
   git_rev: v{{ version }}
+  patches:
+    - 0001-Fixed-cuda-builds-with-gcc-11.patch     #[x86_64]
 
 build:
   number: 1 
@@ -47,8 +49,8 @@ outputs:
         {{ "- tensorflow-addons-cuda" if build_type == 'cuda' else "" }} 
     requirements:
       build:
-        - {{ compiler('c') }}      # [ ppc_arch != "p10"]
-        - {{ compiler('cxx') }}    # [ ppc_arch != "p10"]
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
         - bazel {{ bazel }}
         - git >={{ git }}
       host:
