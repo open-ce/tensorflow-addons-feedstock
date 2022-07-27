@@ -11,6 +11,7 @@ source:
   git_rev: v{{ version }}
   patches:
     - 0001-Fixed-cuda-builds-with-gcc-11.patch     #[x86_64]
+    - 0002-s390x-remove-avx.patch                  # [s390x]
 
 build:
   number: 2
