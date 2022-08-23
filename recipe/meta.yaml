@@ -14,7 +14,7 @@ source:
     - 0002-s390x-remove-avx.patch # [s390x]
 
 build:
-  number: 3
+  number: 4
   run_exports:
     - {{ pin_subpackage("tensorflow-addons", max_pin="x.x.x") }}
 
@@ -60,18 +60,16 @@ outputs:
         - cudatoolkit {{ cudatoolkit }}
         - cudnn {{ cudnn }}
         - nccl {{ nccl }}
-        - tensorflow {{ tensorflow }}
 {% endif %}
-        - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
+        - tensorflow-base {{ tensorflow }}
       run:
         - python  {{ python }}
 {% if build_type == 'cuda' %}
         - cudatoolkit {{ cudatoolkit }}
         - cudnn {{ cudnn }}
         - nccl {{ nccl }}
-        - tensorflow {{ tensorflow }}
 {% endif %}
-        - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
+        - tensorflow-base {{ tensorflow }}
         - typeguard
       run_constrained:
         - tensorflow-addons-proc * {{ build_type }}
