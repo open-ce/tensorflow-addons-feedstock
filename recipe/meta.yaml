@@ -39,7 +39,7 @@ outputs:
     version: {{ version }}
     build:
       string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ build_type }}{{ cudatoolkit | replace(".*", "") }} #[build_type == 'cuda']
-      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ build_type }}  #[build_type == 'cpu']
+      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ build_type }}  #[build_type == 'cpu' or build_type == 'nnpa']
 {% if build_type == 'cuda' %}
       script_env:
         - CUDA_HOME
@@ -62,6 +62,7 @@ outputs:
         - nccl {{ nccl }}
 {% endif %}
         - tensorflow-base {{ tensorflow }}
+        - keras {{ keras }}
       run:
         - python  {{ python }}
 {% if build_type == 'cuda' %}
@@ -70,6 +71,7 @@ outputs:
         - nccl {{ nccl }}
 {% endif %}
         - tensorflow-base {{ tensorflow }}
+        - keras {{ keras }}
         - typeguard
       run_constrained:
         - tensorflow-addons-proc * {{ build_type }}
