@@ -1,0 +1,21 @@
+tests:
+  - name: Setup addon Tests
+    command: |
+        conda install -y git
+        git clone https://github.com/tensorflow/addons.git
+        cd addons/tensorflow_addons
+        git checkout v0.17.0
+        conda install -y pytest
+        pip install sklearn scikit-image typedapi
+        conda list tensorflow
+        python -c "import tensorflow as tf"
+  - name: Run addon tests
+    command: |
+        cd addons/tensorflow_addons
+        SKIPPED_TESTS="not register_test"
+        pytest -v -k "${SKIPPED_TESTS}" tests
+        #pytest -v tests/
+  - name: Clean tests
+    command: |
+        rm -rf addons
+
