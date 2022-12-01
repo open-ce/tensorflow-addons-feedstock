@@ -1,4 +1,4 @@
-{% set version = "0.17.0" %}
+{% set version = "0.18.0" %}
 {% set build_ext_version = version %}
 {% set proc_build_number = "1" %}
 
@@ -14,7 +14,7 @@ source:
     - 0002-s390x-remove-avx.patch                  # [s390x]
 
 build:
-  number: 2
+  number: 1
   run_exports:
     - {{ pin_subpackage("tensorflow-addons", max_pin="x.x.x") }}
 
