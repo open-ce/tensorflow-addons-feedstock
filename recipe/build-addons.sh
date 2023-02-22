@@ -26,7 +26,13 @@ then
   export CUDA_TOOLKIT_PATH=$CUDA_HOME,$PREFIX,"/usr/include"
   export CUDNN_INSTALL_PATH=$PREFIX
   export TF_CUDA_COMPUTE_CAPABILITIES=${cuda_levels}
+
+  # Create symlinks of cublas headers into CONDA_PREFIX
+  mkdir -p $CONDA_PREFIX/include
+  find /usr/include -name cublas*.h -exec ln -s "{}" "$CONDA_PREFIX/include/" ';'
+  export CXXFLAGS="${CXXFLAGS} -I${PREFIX}/include -I${CUDA_HOME}/include -I${CONDA_PREFIX}/include"
 fi
+
 python ./configure.py
 
 SCRIPT_DIR=$RECIPE_DIR/../buildscripts
