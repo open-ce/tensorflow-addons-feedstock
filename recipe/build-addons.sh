@@ -1,6 +1,6 @@
 #!/bin/bash
 # *****************************************************************
-# (C) Copyright IBM Corp. 2020, 2022. All Rights Reserved.
+# (C) Copyright IBM Corp. 2020, 2023. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,9 +16,7 @@
 # *****************************************************************
 set -vex
 
-
-bazel clean --expunge
-bazel shutdown
+source open-ce-common-utils.sh
 
 if [[ $build_type == "cuda" ]];
 then 
@@ -28,7 +26,13 @@ then
   export CUDA_TOOLKIT_PATH=$CUDA_HOME,$PREFIX,"/usr/include"
   export CUDNN_INSTALL_PATH=$PREFIX
   export TF_CUDA_COMPUTE_CAPABILITIES=${cuda_levels}
+
+  # Create symlinks of cublas headers into CONDA_PREFIX
+  mkdir -p $CONDA_PREFIX/include
+  find /usr/include -name cublas*.h -exec ln -s "{}" "$CONDA_PREFIX/include/" ';'
+  export CXXFLAGS="${CXXFLAGS} -I${PREFIX}/include -I${CUDA_HOME}/include -I${CONDA_PREFIX}/include"
 fi
+
 python ./configure.py
 
 SCRIPT_DIR=$RECIPE_DIR/../buildscripts
@@ -49,5 +53,6 @@ pip install --no-deps $SRC_DIR/tensorflow_addons_pkg/*.whl
 echo "PREFIX: $PREFIX"
 echo "RECIPE_DIR: $RECIPE_DIR"
 
-bazel clean --expunge
-bazel shutdown
+PID=$(bazel info server_pid)
+echo "PID: $PID"
+cleanup_bazel $PID
