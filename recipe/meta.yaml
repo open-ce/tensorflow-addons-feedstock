@@ -1,4 +1,4 @@
-{% set version = "0.18.0" %}
+{% set version = "0.19.0" %}
 {% set build_ext_version = version %}
 {% set proc_build_number = "1" %}
 
