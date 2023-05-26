@@ -1,6 +1,6 @@
 #!/bin/bash
 # *****************************************************************
-# (C) Copyright IBM Corp. 2020, 2022. All Rights Reserved.
+# (C) Copyright IBM Corp. 2020, 2023. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +17,7 @@
 set -vex
 
 
-bazel clean --expunge
-bazel shutdown
+source open-ce-common-utils.sh
 
 if [[ $build_type == "cuda" ]];
 then 
@@ -49,5 +48,6 @@ pip install --no-deps $SRC_DIR/tensorflow_addons_pkg/*.whl
 echo "PREFIX: $PREFIX"
 echo "RECIPE_DIR: $RECIPE_DIR"
 
-bazel clean --expunge
-bazel shutdown
+PID=$(bazel info server_pid)
+echo "PID: $PID"
+cleanup_bazel $PID
