@@ -17,8 +17,7 @@
 set -vex
 
 
-bazel clean --expunge
-bazel shutdown
+source open-ce-common-utils.sh
 
 if [[ $build_type == "cuda" ]];
 then 
@@ -49,5 +48,6 @@ pip install --no-deps $SRC_DIR/tensorflow_addons_pkg/*.whl
 echo "PREFIX: $PREFIX"
 echo "RECIPE_DIR: $RECIPE_DIR"
 
-bazel clean --expunge
-bazel shutdown
+PID=$(bazel info server_pid)
+echo "PID: $PID"
+cleanup_bazel $PID
