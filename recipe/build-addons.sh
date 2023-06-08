@@ -26,6 +26,7 @@ then
   export CUDA_TOOLKIT_PATH=$CUDA_HOME,$PREFIX,"/usr/include"
   export CUDNN_INSTALL_PATH=$PREFIX
   export TF_CUDA_COMPUTE_CAPABILITIES=${cuda_levels}
+  ln -s ${AR} $(dirname ${AR})/ar
 fi
 python ./configure.py
 
@@ -33,7 +34,7 @@ SCRIPT_DIR=$RECIPE_DIR/../buildscripts
 $SCRIPT_DIR/set_python_path_for_bazelrc.sh $SRC_DIR
 $SCRIPT_DIR/set_tf_addons_for_bazelrc.sh $SRC_DIR
 
-bazel build -s --enable_runfiles build_pip_pkg
+bazel build --enable_runfiles build_pip_pkg
 
 # build a whl file
 mkdir -p $SRC_DIR/tensorflow_addons_pkg
