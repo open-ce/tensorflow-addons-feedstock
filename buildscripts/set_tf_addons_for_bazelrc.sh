@@ -21,4 +21,7 @@ BAZEL_RC_DIR=$1
 
 cat >> $BAZEL_RC_DIR/.bazelrc << EOF
 build --action_env GCC_HOST_COMPILER_PATH="${CC}"
+build --define=CUB_NS_QUALIFIER="::cub"
+build --cxxopt=-DTHRUST_IGNORE_CUB_VERSION_CHECK
+build --linkopt="-fuse-ld=gold"
 EOF
