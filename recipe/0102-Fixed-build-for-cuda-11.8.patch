@@ -1,0 +1,87 @@
+From c9f3495aa35d426aa786a1d9bb33c504be8d2e7b Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23in.ibm.com>
+Date: Thu, 8 Jun 2023 15:38:26 +0000
+Subject: [PATCH] Fixed build for cuda 11.8
+
+---
+ WORKSPACE                                             | 11 +++++++++++
+ build_deps/toolchains/gpu/cub.BUILD                   |  1 -
+ build_deps/toolchains/gpu/cuda_configure.bzl          |  1 -
+ tensorflow_addons/custom_ops/layers/BUILD             |  1 +
+ .../layers/cc/kernels/correlation_cost_op_gpu.cu.cc   |  2 +-
+ 5 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/WORKSPACE b/WORKSPACE
+index 2f44047..b5621b5 100644
+--- a/WORKSPACE
++++ b/WORKSPACE
+@@ -15,6 +15,17 @@ http_archive(
+     ],
+ )
+ 
++http_archive(
++    name = "cub_archive",
++    build_file = "//build_deps/toolchains/gpu:cub.BUILD",
++    sha256 = "8ec47307f5e99379ac1cf6722cd5a24fc15b84b0f5361bebd453645a5e4bb34d",
++    strip_prefix = "cub-2.1.0",
++    urls = [
++        "https://storage.googleapis.com/mirror.tensorflow.org/github.com/NVlabs/cub/archive/2.1.0.zip",
++        "https://github.com/NVlabs/cub/archive/2.1.0.zip",
++    ],
++)
++
+ load("@org_tensorflow//tensorflow:workspace3.bzl", "tf_workspace3")
+ 
+ tf_workspace3()
+diff --git a/build_deps/toolchains/gpu/cub.BUILD b/build_deps/toolchains/gpu/cub.BUILD
+index cdc9e4f..159e5f3 100644
+--- a/build_deps/toolchains/gpu/cub.BUILD
++++ b/build_deps/toolchains/gpu/cub.BUILD
+@@ -18,7 +18,6 @@ filegroup(
+ cc_library(
+     name = "cub",
+     hdrs = if_cuda([":cub_header_files"]),
+-    include_prefix = "gpu",
+     deps = [
+         "@local_config_cuda//cuda:cuda_headers",
+     ],
+diff --git a/build_deps/toolchains/gpu/cuda_configure.bzl b/build_deps/toolchains/gpu/cuda_configure.bzl
+index ba38c6b..29f862f 100644
+--- a/build_deps/toolchains/gpu/cuda_configure.bzl
++++ b/build_deps/toolchains/gpu/cuda_configure.bzl
+@@ -988,7 +988,6 @@ def _create_local_cuda_repository(repository_ctx):
+     # TODO: when bazel stops adding '-B/usr/bin' by default, remove this
+     #       flag from the CROSSTOOL completely (see
+     #       https://github.com/bazelbuild/bazel/issues/5634)
+-    cuda_defines["%{linker_bin_path_flag}"] = 'flag: "-B/usr/bin"'
+ 
+     cuda_defines["%{host_compiler_path}"] = "clang/bin/crosstool_wrapper_driver_is_not_gcc"
+     cuda_defines["%{host_compiler_warnings}"] = ""
+diff --git a/tensorflow_addons/custom_ops/layers/BUILD b/tensorflow_addons/custom_ops/layers/BUILD
+index 44d8771..07b7019 100644
+--- a/tensorflow_addons/custom_ops/layers/BUILD
++++ b/tensorflow_addons/custom_ops/layers/BUILD
+@@ -18,6 +18,7 @@ custom_op_library(
+         "cc/kernels/correlation_cost_op.h",
+         "cc/kernels/correlation_cost_op_gpu.cu.cc",
+     ],
++    copts = ["-Iexternal/cub_archive"],
+ )
+ 
+ custom_op_library(
+diff --git a/tensorflow_addons/custom_ops/layers/cc/kernels/correlation_cost_op_gpu.cu.cc b/tensorflow_addons/custom_ops/layers/cc/kernels/correlation_cost_op_gpu.cu.cc
+index 16b012a..722f317 100644
+--- a/tensorflow_addons/custom_ops/layers/cc/kernels/correlation_cost_op_gpu.cu.cc
++++ b/tensorflow_addons/custom_ops/layers/cc/kernels/correlation_cost_op_gpu.cu.cc
+@@ -17,7 +17,7 @@ limitations under the License.
+ 
+ #define EIGEN_USE_GPU
+ 
+-#include "gpu/cub/device/device_reduce.cuh"
++#include "cub/device/device_reduce.cuh"
+ #include "tensorflow/core/framework/tensor.h"
+ #include "tensorflow/core/framework/tensor_shape.h"
+ #include "tensorflow/core/util/gpu_kernel_helper.h"
+-- 
+2.34.1
+

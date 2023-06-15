@@ -1,0 +1,30 @@
+From 81e018c1387ad8361d7548b1ad92c4ead929440c Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23in.ibm.com>
+Date: Thu, 1 Jun 2023 17:00:20 +0000
+Subject: [PATCH] Fixed cuda build
+
+---
+ configure.py | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/configure.py b/configure.py
+index 8f1075b..cc9bf9e 100644
+--- a/configure.py
++++ b/configure.py
+@@ -190,9 +190,10 @@ def configure_cuda():
+     write("test --config=cuda")
+     write("build --config=cuda")
+     write("build:cuda --define=using_cuda=true --define=using_cuda_nvcc=true")
+-    write(
+-        "build:cuda --crosstool_top=@ubuntu20.04-gcc9_manylinux2014-cuda11.8-cudnn8.6-tensorrt8.4_config_cuda//crosstool:toolchain"
+-    )
++#    write(
++#        "build:cuda --crosstool_top=@ubuntu20.04-gcc9_manylinux2014-cuda11.8-cudnn8.6-tensorrt8.4_config_cuda//crosstool:toolchain"
++#    )
++    write("build:cuda --crosstool_top=@local_config_cuda//crosstool:toolchain")
+ 
+ 
+ if __name__ == "__main__":
+-- 
+2.34.1
+
