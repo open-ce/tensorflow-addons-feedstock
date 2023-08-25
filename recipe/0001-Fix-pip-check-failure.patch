@@ -1,0 +1,22 @@
+From 99f5e5ccdc7800787fcd98b235d3e9fdac5f95f8 Mon Sep 17 00:00:00 2001
+From: ARchanaShinde1 <archana.shinde2504@gmail.com>
+Date: Tue, 22 Aug 2023 09:16:08 +0000
+Subject: [PATCH] Fix pip check failure
+
+---
+ requirements.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/requirements.txt b/requirements.txt
+index 70463d6..0e80127 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,2 +1,2 @@
+-typeguard>=2.7,<3.0.0
+-packaging
+\ No newline at end of file
++typeguard>=2.7,<=3.0.2
++packaging
+-- 
+2.40.1
+

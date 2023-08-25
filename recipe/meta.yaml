@@ -1,4 +1,4 @@
-{% set version = "0.19.0" %}
+{% set version = "0.21.0" %}
 {% set build_ext_version = version %}
 {% set proc_build_number = "1" %}
 
@@ -10,11 +10,11 @@ source:
   git_url: https://github.com/tensorflow/addons.git
   git_rev: v{{ version }}
   patches:
-    - 0301-Build-2.12-2821.patch
+#    - 0301-Build-2.12-2821.patch
     - 0101-Fixed-cuda-builds-with-gcc-11.patch
     - 0102-Fixed-build-for-cuda-11.8.patch        #[cudatoolkit == '11.8']
     - 0302-s390x-remove-avx.patch                 #[s390x]
-
+    - 0001-Fix-pip-check-failure.patch
 build:
   number: 1
   run_exports:
