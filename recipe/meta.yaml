@@ -1,4 +1,4 @@
-{% set version = "0.21.0" %}
+{% set version = "0.22.0" %}
 {% set build_ext_version = version %}
 {% set proc_build_number = "1" %}
 
@@ -65,6 +65,7 @@ outputs:
         - tensorflow {{ tensorflow }}
 {% endif %}
         - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
+        - ml_dtypes {{ ml_dtypes }}
       run:
         - python  {{ python }}
 {% if build_type == 'cuda' %}
@@ -75,6 +76,7 @@ outputs:
 {% endif %}
         - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
         - typeguard
+        - ml_dtypes {{ ml_dtypes }}
       run_constrained:
         - tensorflow-addons-proc * {{ build_type }}
 
