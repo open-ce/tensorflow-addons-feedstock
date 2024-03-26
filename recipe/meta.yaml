@@ -16,7 +16,7 @@ source:
     - 0302-s390x-remove-avx.patch                 #[s390x]
     - 0001-Fix-pip-check-failure.patch
 build:
-  number: 1
+  number: 2
   run_exports:
     - {{ pin_subpackage("tensorflow-addons", max_pin="x.x.x") }}
 
@@ -74,6 +74,7 @@ outputs:
         - tensorflow {{ tensorflow }}
 {% endif %}
         - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
+        - importlib_metadata 6.0.0
         - typeguard
       run_constrained:
         - tensorflow-addons-proc * {{ build_type }}
