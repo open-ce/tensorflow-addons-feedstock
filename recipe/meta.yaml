@@ -65,6 +65,7 @@ outputs:
         - tensorflow {{ tensorflow }}
 {% endif %}
         - tensorflow-cpu {{ tensorflow }} #[build_type == 'cpu']
+        - importlib_metadata 6.0.0
       run:
         - python  {{ python }}
 {% if build_type == 'cuda' %}
